@@ -1,28 +1,16 @@
-import java.rmi.registry.Registry;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import java.rmi.*;
+import java.rmi.registry.*;
 
-public class Server extends ImplTriangle{
-		public Server(){}
+public class Server{
 		public static void main(String [] args){
 				try{
-						ImplTriangle obj=new ImplTriangle();
 
-						Triangle stub=(Triangle) UnicastRemoteObject.exportObject(obj,0);
+						DateInterface stub=new ImplDate();
+						
+						LocateRegistry.createRegistry(52360);
 
-						Registry registry = null;
-						try {
-								registry = LocateRegistry.getRegistry(52365);//use any no. less than 55000
-								registry.list();
-								// This call will throw an exception if the registry does not already exist
-						}
-						catch (RemoteException e) { 
-								registry = LocateRegistry.createRegistry(52365);
-						}
-
-
-						registry.bind("Triangle",stub);
+					  String registryUrl=("rmi://localhost:52360"+"/date");
+						Naming.rebind(registryUrl,stub);
 						System.err.println("Server Ready!!");
 				}catch(Exception e){
 						System.err.println("Server Exception: "+e.toString());

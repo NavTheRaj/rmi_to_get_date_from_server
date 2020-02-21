@@ -1,18 +1,17 @@
-import java.rmi.registry.LocateRegistry; 
-import java.rmi.registry.Registry;  
+import java.rmi.*; 
 
 public class Client {  
 		private Client() {}  
 		public static void main(String[] args) {  
 				try {  
 						// Getting the registry 
-						Registry registry = LocateRegistry.getRegistry(null); 
-
+						
+						String registryUrl=("rmi://localhost:52360"+"/date");
 						// Looking up the registry for the remote object 
-						Triangle stub = (Triangle) registry.lookup("Triangle"); 
+						DateInterface stub = (DateInterface)Naming.lookup(registryUrl); 
 
 						// Calling the remote method using the obtained object 
-						stub.getArea(10,20); 
+						stub.printDate(); 
 
 						// System.out.println("Remote method invoked"); 
 				} catch (Exception e) {
